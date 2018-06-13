@@ -23,11 +23,25 @@ include_once ("php/db_link.php");
 
 <body>
 <nav>
-    <p>Startseite</p>
+    <p>Startseite</p>23
     <p><a href="statistik.php">Statistik</a></p>
 </nav>
 
 <h2>Hier ist später das Formular</h2>
+<form action="php/insert.php" method="post">
+    <h2>Feel free to contact us about any issues or questions concerning this website.</h2><br>
+
+    <label for="Datum">Datum</label>
+    <input type="date" id="Datum" name="Datum" required autofocus><br>
+
+    <label for="Dauer">Dauer</label>
+    <input id="Dauer" name="Dauer" required><br>
+
+    <label for="Distanz">Distanz</label>
+    <input id="Distanz" name="Distanz" required><br>
+
+    <input id="submit" type="submit" value="submit">
+</form>
 <h2>Darunter die bisher eingetragenen Läufe</h2>
 
 </body>

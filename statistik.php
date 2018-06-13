@@ -1,5 +1,6 @@
 <?php
 include_once ("php/db_link.php");
+include_once ("php/get.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,7 +20,7 @@ include_once ("php/db_link.php");
     </style>
 
     <script>
-        var all_data = <?php echo json_encode([[10,20], [10,10], [55,72]]); ?>;
+        var all_data = JSON.parse('<?php echo json_encode($data)?>');
     </script>
 
     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>

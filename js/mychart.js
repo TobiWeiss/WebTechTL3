@@ -1,104 +1,49 @@
-$(document).ready(function() {
+<?php
+include_once ("php/db_link.php");
+include_once ("php/get.php");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Der Lauftracker</title>
+    <meta charset="utf-8">
 
-    console.log(all_data);
-    var run = {
-        Datum: "",
-        Dauer: "",
-        Distanz:"",
-        ID:""
-    };
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+  
+    <!-- Logo: Silk Icons http://www.famfamfam.com/lab/icons/silk/ -->
+    <link rel="icon" href="logo.png" type="image/png">
 
-    run = all_data[0];
-    console.log(run);
-    console.log(run.Distanz);
-
-
-    // draw coordinate system
-    var svg = d3.select('#chart');
-
-    var margin = {top:15, left:40, bottom:40, right:15 };
-
-    var width = 500;
-    var height = 500;
-
-    function maxDistance() {
-        var maxDistance = 0;
-        for(var i = 0; i < all_data.length; i++){
-            run = all_data[i];
-            if(run.Distanz > maxDistance){
-                maxDistance = run.Distanz;
-            }
+    <style>
+        html {
+            overflow-y: scroll;
         }
-       return maxDistance;
-    }
+    </style>
 
-    function maxSpeed() {
-        var maxSpeed = 0;
-        for(var i = 0; i < all_data.length; i++){
-            run = all_data[i];
-            var speed = 60/run.Dauer*run.Distanz;
-            console.log(speed);
-            if(speed > maxSpeed){
-                maxSpeed = speed;
-            }
-        }
-        return maxSpeed;
-    }
+    <script>
+        var all_data = JSON.parse('<?php echo json_encode($data)?>');
+    </script>
 
-    function setCircle(){
-        var speedSet = [];
-        var distanceSet = [];
-        for(var i = 0; i < all_data.length; i++){
-            run =all_data[i];
-            speedSet[i] = 60/run.Dauer*run.Distanz;
-            distanceSet[i] = run.Distanz;
-        }
-        var dataSet = [];
-        for(var i = 0; i < speedSet.length; i++){
-            dataSet[i] = new Array(distanceSet[i], speedSet[i]);
-            console.log(dataSet);
-        }
-        return dataSet;
-    }
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/d3.v4.js"></script>
+    <script type="text/javascript" src="js/mychart.js"></script>
+</head>
 
+<body>
+<p><a href="index.php">Startseite</a></p>
+<p>Statistik</p>
 
+<h2>Scatterplot</h2>
 
-
-    var xAxisScale = d3.scaleLinear().domain([0,maxDistance()]).range([0,width - margin.left - margin.right]);
-    var yAxisScale = d3.scaleLinear().domain([0,maxSpeed()+10]).range([height - margin.top - margin.bottom, 0]);
-
-    var xAxis = d3.axisBottom().scale(xAxisScale);
-    var yAxis = d3.axisLeft().scale(yAxisScale);
-
-    svg.append("g")
-        .attr("transform", "translate("+[margin.left, height-margin.bottom]+")")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("transform", "translate("+[margin.left, margin.top]+")")
-        .call(yAxis);
-    var g = svg.append("svg:g");
-    g.selectAll("scatter-dots")
-        .data(setCircle())
-        .enter().append("svg:circle")
-        .attr("cx", function (d,i) { return xAxisScale(d[0]); } )
-        .attr("cy", function (d) { return yAxisScale(d[1]); } )
-        .attr("r", 4);
-
-    // text labels for axes
-    svg.append("text")             
-    .attr("transform",
-            "translate(" + (width/2) + " ," + 
-                        (height - margin.top + 10) + ")")
-    .style("text-anchor", "middle")
-    .text("Distanz in Km");
-
-    svg.append("text")             
-    .attr("transform",
-            "translate(" + 15 + " ," + 
-                        (height/2) + "), rotate(-90)")
-    .style("text-anchor", "middle")
-    .text("Geschwindigkeit in Km/h");
-
-});
-
+<div class="container">
+    <div class="row  justify-content-around">
+        <div class="col-sm-12 col-md-8">
+            
+            <div id="chart_container">
+                <svg class="border border-danger" preserveAspectRatio="xMinYMin" viewBox="0 0 500 500" id="chart"></svg>
+            <div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

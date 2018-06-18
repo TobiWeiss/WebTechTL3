@@ -18,8 +18,8 @@ $(document).ready(function() {
 
     var margin = {top:15, left:40, bottom:40, right:15 };
 
-    var width = 500 
-    var height = 500
+    var width = 500;
+    var height = 500;
 
     function maxDistance() {
         var maxDistance = 0;
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 
     var xAxisScale = d3.scaleLinear().domain([0,maxDistance()]).range([0,width - margin.left - margin.right]);
-    var yAxisScale = d3.scaleLinear().domain([0,maxSpeed()]).range([height - margin.top - margin.bottom, 0]);
+    var yAxisScale = d3.scaleLinear().domain([0,maxSpeed()+10]).range([height - margin.top - margin.bottom, 0]);
 
     var xAxis = d3.axisBottom().scale(xAxisScale);
     var yAxis = d3.axisLeft().scale(yAxisScale);
@@ -83,7 +83,7 @@ $(document).ready(function() {
         .enter().append("svg:circle")
         .attr("cx", function (d,i) { return xAxisScale(d[0]); } )
         .attr("cy", function (d) { return yAxisScale(d[1]); } )
-        .attr("r", 8);
+        .attr("r", 4);
 
     // text labels for axes
     svg.append("text")             

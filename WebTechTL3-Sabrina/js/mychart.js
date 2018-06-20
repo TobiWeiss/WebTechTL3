@@ -1,17 +1,16 @@
 $(document).ready(function () {
 
     console.log(all_data);
-    var run = {
+
+    var array;
+    array = {
         Datum: "",
         Dauer: "",
         Distanz: "",
         ID: ""
     };
 
-    run = all_data[0];
-    console.log(run);
-    console.log(run.Distanz);
-
+    array =  all_data;
 
     // draw coordinate system
     var svg = d3.select('#chart');
@@ -21,54 +20,34 @@ $(document).ready(function () {
     var width = 500;
     var height = 500;
 
-    function maxDistance() {
-        var maxDistance = 0;
-        for (var i = 0; i < all_data.length; i++) {
-            run = all_data[i];
-            if (run.Distanz > maxDistance) {
-                maxDistance = run.Distanz;
-            }
-        }
-        return maxDistance;
-    }
-
-    function maxSpeed() {
-        var maxSpeed = 0;
-        for (var i = 0; i < all_data.length; i++) {
-            run = all_data[i];
-            var speed = 60 / run.Dauer * run.Distanz;
-            console.log(speed);
-            if (speed > maxSpeed) {
-                maxSpeed = speed;
-            }
-        }
-        return maxSpeed;
-    }
-
-    function setCircle() {
-        var speedSet = [];
-        var distanceSet = [];
-        for (var i = 0; i < all_data.length; i++) {
-            run = all_data[i];
-            speedSet[i] = 60 / run.Dauer * run.Distanz;
-            distanceSet[i] = run.Distanz;
-        }
-        var dataSet = [];
-        for (var i = 0; i < speedSet.length; i++) {
-            dataSet[i] = new Array(distanceSet[i], speedSet[i]);
-            console.log(dataSet);
-        }
-        return dataSet;
-    }
 
 
-
-
-    var xAxisScale = d3.scaleLinear().domain([0, maxDistance()]).range([0, width - margin.left - margin.right]);
-    var yAxisScale = d3.scaleLinear().domain([0, maxSpeed() + 10]).range([height - margin.top - margin.bottom, 0]);
+    var maxY = d3.max(all_data, function(d) {return  +(d.Distanz*1000)/(d.Dauer*60)+1;} );
+    console.log(maxY);
+    var maxX = d3.max(all_data, function(d) {return  +d.Distanz;} );
+    console.log(maxX);
+    var xAxisScale = d3.scaleLinear().domain([0, maxX]).range([0, width - margin.left - margin.right]);
+    var yAxisScale = d3.scaleLinear().domain([0, maxY]).range([height - margin.top - margin.bottom, 0]);
 
     var xAxis = d3.axisBottom().scale(xAxisScale);
     var yAxis = d3.axisLeft().scale(yAxisScale);
+
+
+    var parseDate = d3.timeParse("%Y-%m-%d");
+    all_data.Datum = parseDate(all_data[0].Datum);
+
+
+    var minDate = d3.min(all_data, function(d) {return parseDate(d.Datum)});
+    console.log(minDate);
+    var maxDate = d3.max(all_data, function(d) {return parseDate(d.Datum)});
+    console.log(maxDate);
+    /*var maxDate = all_data.Datum[all_data.Datum.length-1];
+    console.log(maxDate);*/
+
+
+    var opacity = d3.scaleLinear().domain([minDate, maxDate]).range(0.2, 1);
+    console.log(opacity);
+
 
     svg.append("g")
         .attr("transform", "translate(" + [margin.left, height - margin.bottom] + ")")
@@ -79,11 +58,12 @@ $(document).ready(function () {
         .call(yAxis);
     var g = svg.append("svg:g");
     g.selectAll("scatter-dots")
-        .data(setCircle())
+        .data(all_data)
         .enter().append("svg:circle")
-        .attr("cx", function (d) { return xAxisScale(d[0]); })
-        .attr("cy", function (d) { return yAxisScale(d[1]); })
-        .attr("r", 4);
+        .attr("cx", function (d) { return xAxisScale(d.Distanz+0.5); })
+        .attr("cy", function (d) { return yAxisScale((d.Distanz*1000)/(d.Dauer*60)); })
+        .attr("r", 8)
+        .style("opacity", function(d) {return opacity(parseDate(d.Datum));});
 
     // text labels for axes
     svg.append("text")

@@ -1,17 +1,7 @@
 $(document).ready(function () {
 
     console.log(all_data);
-
-    var array;
-    array = {
-        Datum: "",
-        Dauer: "",
-        Distanz: "",
-        ID: ""
-    };
-
-    array =  all_data;
-
+    
     // draw coordinate system
     var svg = d3.select('#chart');
 
@@ -22,31 +12,17 @@ $(document).ready(function () {
 
 
 
-    var maxY = d3.max(all_data, function(d) {return  +(d.Distanz*1000)/(d.Dauer*60)+1;} );
-    console.log(maxY);
+    var maxY = d3.max(all_data, function(d) {return  +(d.Distanz*1000)/(d.Dauer*60)+1;} )
     var maxX = d3.max(all_data, function(d) {return  +d.Distanz;} );
-    console.log(maxX);
+
     var xAxisScale = d3.scaleLinear().domain([0, maxX]).range([0, width - margin.left - margin.right]);
     var yAxisScale = d3.scaleLinear().domain([0, maxY]).range([height - margin.top - margin.bottom, 0]);
 
+    var opacity = d3.scaleLinear().domain([0, all_data.length -1]).range([0.2, 1]);
+
+
     var xAxis = d3.axisBottom().scale(xAxisScale);
     var yAxis = d3.axisLeft().scale(yAxisScale);
-
-
-    var parseDate = d3.timeParse("%Y-%m-%d");
-    all_data.Datum = parseDate(all_data[0].Datum);
-
-
-    var minDate = d3.min(all_data, function(d) {return parseDate(d.Datum)});
-    console.log(minDate);
-    var maxDate = d3.max(all_data, function(d) {return parseDate(d.Datum)});
-    console.log(maxDate);
-    /*var maxDate = all_data.Datum[all_data.Datum.length-1];
-    console.log(maxDate);*/
-
-
-    var opacity = d3.scaleLinear().domain([minDate, maxDate]).range(0.2, 1);
-    console.log(opacity);
 
 
     svg.append("g")
@@ -62,8 +38,10 @@ $(document).ready(function () {
         .enter().append("svg:circle")
         .attr("cx", function (d) { return xAxisScale(d.Distanz+0.5); })
         .attr("cy", function (d) { return yAxisScale((d.Distanz*1000)/(d.Dauer*60)); })
-        .attr("r", 8)
-        .style("opacity", function(d) {return opacity(parseDate(d.Datum));});
+        .attr("r", 15)
+        .style("fill", "blue")
+        .style("fill-opacity", function(d, i) {return opacity(i);})
+
 
     // text labels for axes
     svg.append("text")

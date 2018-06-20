@@ -81,7 +81,7 @@ $(document).ready(function () {
     g.selectAll("scatter-dots")
         .data(setCircle())
         .enter().append("svg:circle")
-        .attr("cx", function (d, i) { return xAxisScale(d[0]); })
+        .attr("cx", function (d) { return xAxisScale(d[0]); })
         .attr("cy", function (d) { return yAxisScale(d[1]); })
         .attr("r", 4);
 

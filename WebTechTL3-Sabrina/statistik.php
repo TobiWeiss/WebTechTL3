@@ -30,13 +30,13 @@ include_once ("php/get.php");
 </head>
 
 <body>
-<div class="container">
+   <div class="container">
         <header class="clearfix">
-            <nav class="navbar navbar-expand-sm navbar-light bg-dark my-pagination-margin text-light" style="margin-bottom: 30px;">
-                <ul class="navbar-nav">
-                    <li class="nav-item"> Lauftracking </li> <br></br>
+            <nav class="navbar navbar-expand-sm navbar-light bg-dark my-pagination-margin text-light">
+                <li class="navbar-brand text-center text-light "> Lauftracking </li>
+                <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-link active text-light" href="index.php">Home</a> </li>
-                    <li class="nav-item"><a class="nav-link active text-light" href="statistik.php">Statistik</a> </li>
+                    <li class="nav-item"><a class="nav-link active text-light" <a href="statistik.php">Statistik</a> </li>
                 </ul>
             </nav>
         </header>

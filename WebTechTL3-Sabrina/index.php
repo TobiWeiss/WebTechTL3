@@ -2,6 +2,7 @@
 include_once ("php/quotes.php");
 include_once ("php/db_link.php");
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,11 +23,12 @@ include_once ("php/db_link.php");
 </head>
 
 <body>
+
     <div class="container">
         <header class="clearfix">
             <nav class="navbar navbar-expand-sm navbar-light bg-dark my-pagination-margin text-light">
-                <ul class="navbar-nav">
-                    <li class="nav-item text-center"> Lauftracking </li>
+                <li class="navbar-brand text-center text-light "> Lauftracking </li>
+                <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-link active text-light" href="index.php">Home</a> </li>
                     <li class="nav-item"><a class="nav-link active text-light" <a href="statistik.php">Statistik</a> </li>
                 </ul>
@@ -35,7 +37,7 @@ include_once ("php/db_link.php");
     
 
     <div class="height: 75px; container-fluid text-center" style="background-color: #666666; color: white; margin-bottom: 30px;">
-        <h3> <? echo $quotes[array_rand($quotes)]; ?> </h3>
+        <h3> <?php echo $quotes[array_rand($quotes)] ?> </h3>
     </div>
 
 
@@ -63,26 +65,55 @@ include_once ("php/db_link.php");
             <input id="submit" type="submit" value="submit">
         </form>
     </div>
-
-            <!-- <h2>Hier ist später das Formular</h2>
-            <form action="php/insert.php" method="post">
-                <h2>Feel free to contact us about any issues or questions concerning this website.</h2><br>
-
-                <label for="Datum">Datum</label>
-                <input type="date" id="Datum" name="Datum" required autofocus><br>
-
-                <label for="Dauer">Dauer</label>
-                <input id="Dauer" name="Dauer" required><br>
-
-                <label for="Distanz">Distanz</label>
-                <input id="Distanz" name="Distanz" required><br>
-
-                <input id="submit" type="submit" value="submit">
-            </form> -->
             
     <div class="container-fluid text-center" style="margin-bottom: 30px;">
         <h2>Bisherige Läufe</h2>
+
+        <?php 
+        $datenbank = get_all_entries(); 
+        foreach($datenbank as $run){
+            echo "<div class = 'row'>";
+            echo "<div class='col-sm-6'>";
+            echo "<p> <strong>Datum:</strong><br> " .$run['Datum'] ."</p><br>";
+            echo "<p> <strong>Dauer: </strong><br>" .$run['Dauer']. "</p><br>";
+            echo "<p> <strong> Distanz: </strong><br>" .$run['Distanz'] ."</p><br></div></div>";
+            echo "<form action=php/delete.php method='post'> <button name='button' value=" .$run['ID']. "> Delete </button> </form>";
+            // if($run['Dauer'] != 0){
+            //     $Geschwindigkeit = $run['Distanz'] / $run['Dauer']; 
+            // }else{
+            //     $Geschwindigkeit = 0;
+            // }
+            // echo "<p> Geschwindigkeit: " .$run['Geschwindigkeit'] ."</p><br></div></div>";
+        }
+        ?>
+        
+<!-- 
+        $result = mysqli_query($db_link, "SELECT * FROM Runs"); 
+        while($entry = mysqli_fetch_array($result){
+            <form action="php/get_entries.php" method="post">
+                <div class="row">
+                     <div class="col-sm-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-body"> <p> Datum : $entry['Datum'] </p> </div>
+                            <div class="panel-body"> <p> Distanz : $entry['Distanz'] </p> </div>
+                            <div class="panel-body"> <p> Dauer : $entry['Dauer'] </p> </div>
+                            <div class="panel-body"> <p> Geschwindigkeit: ($entry['Distanz'] / $entry['Dauer'] </p> </div>
+                                <div class="panel-footer">  
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </form>
+        }
     </div>
+        <!-- for each --- access each entry in database 
+            -- put in array 
+
+        use form -- with php/delete.php (have delete button on each field) -->
+
+    </div> 
 
     </div>
 </body>

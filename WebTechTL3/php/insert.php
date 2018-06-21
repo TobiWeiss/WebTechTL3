@@ -15,7 +15,7 @@ $Distanz = mysqli_real_escape_string($db_link, $_POST['Distanz']);
 ensure_table_exists();
 add_entry($Datum, $Dauer, $Distanz);
 
-header("Location: http://localhost/WebTechTL3-Tobi/index.php");
+header("Location: http://localhost/WebTechTL3/index.php");
 exit;
 
 ?>

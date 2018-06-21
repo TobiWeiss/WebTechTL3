@@ -46,9 +46,11 @@ function delete_entry($entry_id) {
 
     $sql = "DELETE FROM Runs WHERE ID = ?";
     $stmt = mysqli_stmt_init($db_link); 
+
     if(!mysqli_stmt_prepare($stmt, $sql)) {
         echo "SQL error";
     } else {
+        mysqli_stmt_bind_param($stmt, "i", $entry_id);
         mysqli_stmt_execute($stmt);
     }
 

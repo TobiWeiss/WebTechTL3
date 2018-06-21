@@ -8,11 +8,12 @@ include_once ("php/db_link.php");
 <head>
     <title>Der Lauftracker</title>
     <meta charset="utf-8">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 
     <!-- Logo: Silk Icons http://www.famfamfam.com/lab/icons/silk/ -->
     <link rel="icon" href="logo.png" type="image/png">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"> 
     <style>
         html {
             overflow-y: scroll;
@@ -24,16 +25,29 @@ include_once ("php/db_link.php");
 
 <body>
 
-    <div class="container">
-        <header class="clearfix">
-            <nav class="navbar navbar-expand-sm navbar-light bg-dark my-pagination-margin text-light">
-                <li class="navbar-brand text-center text-light "> Lauftracking </li>
-                <ul class="nav navbar-nav">
-                    <li class="nav-item"><a class="nav-link active text-light" href="index.php">Home</a> </li>
-                    <li class="nav-item"><a class="nav-link active text-light" <a href="statistik.php">Statistik</a> </li>
-                </ul>
-            </nav>
-        </header>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Lauftracking</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="index.php">Start</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="statistik.php">Statistik</a>
+      </li> 
+    </ul>
+  </div> 
+</nav>
+
+
     
 
     <div class="height: 75px; container-fluid text-center" style="background-color: #666666; color: white; margin-bottom: 30px;">
@@ -62,35 +76,52 @@ include_once ("php/db_link.php");
                 <small id="distanzHilfe" class="form-text text-muted">Einheit: Kilometer (km)</small>
             </div>
             <!-- <button id="submit" type="submit" value="submit" class="btn btn-primary">Submit</button> -->
-            <input id="submit" type="submit" value="submit">
+            <input id="submit" type="submit" value="submit" class="btn btn-primary">
         </form>
     </div>
+
+
             
     <div class="container-fluid text-center" style="margin-bottom: 30px;">
         <h2>Bisherige Läufe</h2>
+    </div>
 
         <?php 
+        $counter = 0; 
         $datenbank = get_all_entries(); 
-        foreach($datenbank as $run){
-            echo "<div class = 'row'>";
-            echo "<div class='col-sm-6'>";
-            echo "<p> <strong>Datum:</strong><br> " .$run['Datum'] ."</p><br>";
-            echo "<p> <strong>Dauer: </strong><br>" .$run['Dauer']. "</p><br>";
-            echo "<p> <strong> Distanz: </strong><br>" .$run['Distanz'] ."</p><br></div></div>";
-            echo "<form action=php/delete.php method='post'> <button name='button' value=" .$run['ID']. "> Delete </button> </form>";
-            // if($run['Dauer'] != 0){
-            //     $Geschwindigkeit = $run['Distanz'] / $run['Dauer']; 
-            // }else{
-            //     $Geschwindigkeit = 0;
-            // }
-            // echo "<p> Geschwindigkeit: " .$run['Geschwindigkeit'] ."</p><br></div></div>";
+        foreach($datenbank as $zeile){
+            if($counter % 2 == 0){
+                echo "<div class='row'>";
+            }  
+            echo "<div class='col-sm-1'> </div>" ;
+            echo "<div class='col-sm-4 border border-dark rounded bg-light'>" ;
+            echo "<strong>Datum:</strong><br> " .$zeile['Datum'] ."<br>";
+            echo "<strong>Dauer: </strong><br>" .$zeile['Dauer']. " Minuten<br>";
+            echo "<strong> Distanz: </strong><br>" .$zeile['Distanz'] ." Kilometer<br>";
+             if($zeile['Dauer'] != 0){
+                 $Tempo = round($zeile['Distanz'] / $zeile['Dauer'], 2); 
+             }else{
+                 $Tempo = 1;
+             }
+             
+            $Geschwindigkeit = round(60 / $Tempo, 2);
+
+            echo "<strong> Geschwindigkeit: </strong><br>" .$Geschwindigkeit. " km/h - " .$Tempo ." Min/km <br>"; 
+            echo "<br>"."<form action=php/delete.php method='post'> <button name='button' value=" .$zeile['ID']. ">  Löschen </button> </form>";
+            echo " </div> ";
+            echo "<div class='col-sm-1'> </div>" ;
+
+            if($counter % 2 == 1){
+                echo "</div> <br>";
+            }
+            $counter++; 
         }
         ?>
+
         
 <!-- 
         $result = mysqli_query($db_link, "SELECT * FROM Runs"); 
         while($entry = mysqli_fetch_array($result){
-            <form action="php/get_entries.php" method="post">
                 <div class="row">
                      <div class="col-sm-6">
                         <div class="panel panel-primary">

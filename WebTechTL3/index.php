@@ -1,6 +1,6 @@
 <?php
 include_once ("php/quotes.php");
-include_once ("php/db_link.php");
+include_once ("php/get.php")
 ?>
 
 <!DOCTYPE html>
@@ -67,16 +67,16 @@ include_once ("php/db_link.php");
             </div>
             <div class="form-group">
                 <label for="Dauer">Dauer</label>
-                <input type="number" name="Dauer" class="form-control" id="Dauer" placeholder="Dauer">
+                <input type="number" step="0.1" name="Dauer" class="form-control" id="Dauer" placeholder="Dauer">
                 <small id="dauerHilfe" class="form-text text-muted">Einheit: Minuten</small>
             </div>
             <div class="form-group">
                 <label for="Distanz">Distanz</label>
-                <input type="number" name="Distanz" class="form-control" id="Distanz" placeholder="Distanz">
+                <input type="number" step="0.01" name="Distanz" class="form-control" id="Distanz" placeholder="Distanz">
                 <small id="distanzHilfe" class="form-text text-muted">Einheit: Kilometer (km)</small>
             </div>
             <!-- <button id="submit" type="submit" value="submit" class="btn btn-primary">Submit</button> -->
-            <input id="submit" type="submit" value="submit" class="btn btn-primary">
+            <input id="submit" type="submit" value="Bestätigen" class="btn btn-primary">
         </form>
     </div>
 
@@ -88,7 +88,11 @@ include_once ("php/db_link.php");
 
         <?php 
         $counter = 0; 
-        $datenbank = get_all_entries(); 
+        $datenbank = $data;
+        function sortFunction( $a, $b ) {
+            return strtotime($b["Datum"]) - strtotime($a["Datum"]);
+        }
+        usort($datenbank, "sortFunction");
         foreach($datenbank as $zeile){
             if($counter % 2 == 0){
                 echo "<div class='row'>";
@@ -99,14 +103,14 @@ include_once ("php/db_link.php");
             echo "<strong>Dauer: </strong><br>" .$zeile['Dauer']. " Minuten<br>";
             echo "<strong> Distanz: </strong><br>" .$zeile['Distanz'] ." Kilometer<br>";
              if($zeile['Dauer'] != 0){
-                 $Tempo = round($zeile['Distanz'] / $zeile['Dauer'], 2); 
+                 $Tempo = round(($zeile['Distanz']) / ($zeile['Dauer'] / 60), 2);
              }else{
                  $Tempo = 1;
              }
              
-            $Geschwindigkeit = round(60 / $Tempo, 2);
+            $Geschwindigkeit = round($zeile['Dauer']/$zeile['Distanz'], 2);
 
-            echo "<strong> Geschwindigkeit: </strong><br>" .$Geschwindigkeit. " km/h - " .$Tempo ." Min/km <br>"; 
+            echo "<strong> Geschwindigkeit: </strong><br>" .$Tempo. " km/h - " .$Geschwindigkeit ." Min/km <br>";
             echo "<br>"."<form action=php/delete.php method='post'> <button name='button' value=" .$zeile['ID']. ">  Löschen </button> </form>";
             echo " </div> ";
             echo "<div class='col-sm-1'> </div>" ;

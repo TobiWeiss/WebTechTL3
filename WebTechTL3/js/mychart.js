@@ -12,7 +12,7 @@ $(document).ready(function () {
 
 
 
-    var maxY = d3.max(all_data, function(d) {return  +(d.Distanz*1000)/(d.Dauer*60)+1;} )
+    var maxY = d3.max(all_data, function(d) {return  +(d.Distanz)/(d.Dauer/60)+1;} );
     var maxX = d3.max(all_data, function(d) {return  +d.Distanz;} );
 
     var xAxisScale = d3.scaleLinear().domain([0, maxX]).range([0, width - margin.left - margin.right]);
@@ -37,7 +37,7 @@ $(document).ready(function () {
         .data(all_data)
         .enter().append("svg:circle")
         .attr("cx", function (d) { return xAxisScale(d.Distanz+0.5); })
-        .attr("cy", function (d) { return yAxisScale((d.Distanz*1000)/(d.Dauer*60)); })
+        .attr("cy", function (d) { return yAxisScale((d.Distanz)/(d.Dauer/60)); })
         .attr("r", 15)
         .style("fill", "blue")
         .style("fill-opacity", function(d, i) {return opacity(i);})
